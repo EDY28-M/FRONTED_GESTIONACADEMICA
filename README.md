@@ -77,35 +77,7 @@ Danger: #EF4444 (Rojo)
 
 La forma más fácil de levantar todo el sistema es usando los scripts automáticos ubicados en la carpeta raíz:
 
-#### 🎯 Opción 1: Menu Interactivo
-```bash
-# Desde la carpeta raíz del proyecto:
-menu.bat
-```
 
-#### 🚀 Opción 2: Scripts Directos
-```bash
-# Inicio normal (recomendado)
-start-system.bat
-
-# Inicio rápido con navegador automático
-quick-start.bat
-
-# Modo desarrollo con hot reload
-dev-mode.bat
-
-# Verificar sistema antes de empezar
-check-system.bat
-
-# Detener todos los servicios
-stop-system.bat
-```
-
-#### 💻 PowerShell (Alternativo)
-```powershell
-# Para usuarios de PowerShell
-.\start-system.ps1
-```
 
 ### 🔧 Instalación Manual
 
