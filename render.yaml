@@ -5,11 +5,13 @@ services:
   # Frontend Service
   - type: web
     name: gestion-academica-frontend
-    env: node
-    plan: starter
+    env: static
     buildCommand: npm run build:prod
-    startCommand: npm run preview
-    healthCheckPath: /
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: NODE_VERSION
         value: 18.18.0
