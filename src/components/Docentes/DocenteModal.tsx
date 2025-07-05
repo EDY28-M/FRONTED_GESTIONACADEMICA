@@ -201,7 +201,7 @@ const DocenteModal: React.FC<DocenteModalProps> = ({
                               <div className="space-y-2">
                                 {docente.cursos.map((curso) => (
                                   <div key={curso.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                    <span className="text-sm font-medium">{curso.nombreCurso}</span>
+                                    <span className="text-sm font-medium">{curso.nombre}</span>
                                     <span className="text-xs text-gray-500">Ciclo {curso.ciclo}</span>
                                   </div>
                                 ))}

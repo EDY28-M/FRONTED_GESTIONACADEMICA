@@ -37,11 +37,11 @@ const CursoModal: React.FC<CursoModalProps> = ({
 
   useEffect(() => {
     if (isOpen && curso && (isEditMode || isViewMode)) {
-      setValue('nombreCurso', curso.nombreCurso)
+      setValue('nombre', curso.nombre)
       setValue('creditos', curso.creditos)
       setValue('horasSemanal', curso.horasSemanal)
       setValue('ciclo', curso.ciclo)
-      setValue('idDocente', curso.idDocente || undefined)
+      setValue('docenteId', curso.docenteId || undefined)
     } else if (isOpen && isCreateMode) {
       reset()
     }
@@ -77,7 +77,7 @@ const CursoModal: React.FC<CursoModalProps> = ({
   const onSubmit = (data: CursoCreate | CursoUpdate) => {
     const formData = {
       ...data,
-      idDocente: data.idDocente || undefined,
+      docenteId: data.docenteId || undefined,
     }
 
     if (isCreateMode) {
@@ -138,12 +138,12 @@ const CursoModal: React.FC<CursoModalProps> = ({
                         <label className="label">Nombre del Curso *</label>
                         <input
                           type="text"
-                          {...register('nombreCurso', { required: 'El nombre del curso es requerido' })}
+                          {...register('nombre', { required: 'El nombre del curso es requerido' })}
                           className="input"
                           disabled={isViewMode}
                         />
-                        {errors.nombreCurso && (
-                          <p className="mt-1 text-sm text-red-600">{errors.nombreCurso.message}</p>
+                        {errors.nombre && (
+                          <p className="mt-1 text-sm text-red-600">{errors.nombre.message}</p>
                         )}
                       </div>
 
@@ -209,7 +209,7 @@ const CursoModal: React.FC<CursoModalProps> = ({
                       <div>
                         <label className="label">Docente Asignado</label>
                         <select
-                          {...register('idDocente')}
+                          {...register('docenteId')}
                           className="input"
                           disabled={isViewMode}
                         >

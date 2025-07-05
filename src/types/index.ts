@@ -33,33 +33,33 @@ export interface DocenteSimple {
 
 export interface Curso {
   id: number
-  nombreCurso: string
+  nombre: string
   creditos: number
   horasSemanal: number
   ciclo: number
-  idDocente?: number
+  docenteId?: number
   docente?: DocenteSimple
 }
 
 export interface CursoCreate {
-  nombreCurso: string
+  nombre: string
   creditos: number
   horasSemanal: number
   ciclo: number
-  idDocente?: number
+  docenteId?: number
 }
 
 export interface CursoUpdate {
-  nombreCurso: string
+  nombre: string
   creditos: number
   horasSemanal: number
   ciclo: number
-  idDocente?: number
+  docenteId?: number
 }
 
 export interface CursoSimple {
   id: number
-  nombreCurso: string
+  nombre: string
   creditos: number
   horasSemanal: number
   ciclo: number

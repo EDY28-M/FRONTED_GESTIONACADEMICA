@@ -32,6 +32,7 @@ api.interceptors.response.use(
   (response: AxiosResponse) => {
     if (import.meta.env.VITE_DEV_MODE === 'true') {
       console.log(`✅ ${response.status} ${response.config.url}`)
+      console.log('📊 Response data:', response.data)
     }
     return response
   },

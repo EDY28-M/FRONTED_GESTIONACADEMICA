@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -35,6 +35,16 @@ const CursosPage = () => {
     queryFn: cursosApi.getAll,
   })
 
+  useEffect(() => {
+    if (cursos) {
+      console.log('📚 Cursos recibidos desde API:', cursos)
+      console.log('📊 Total cursos:', cursos.length)
+      if (cursos.length > 0) {
+        console.log('🔍 Primer curso ejemplo:', cursos[0])
+      }
+    }
+  }, [cursos])
+
   const { data: docentes } = useQuery({
     queryKey: ['docentes'],
     queryFn: docentesApi.getAll,
@@ -55,14 +65,22 @@ const CursosPage = () => {
   })
 
   const filteredCursos = cursos?.filter(curso => {
-    const matchesSearch = curso.nombreCurso.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      curso.docente?.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      curso.docente?.apellidos.toLowerCase().includes(searchTerm.toLowerCase())
+    // Validar que el curso tenga las propiedades básicas
+    if (!curso || !curso.nombre) return false;
     
-    const matchesCiclo = selectedCiclo === '' || curso.ciclo.toString() === selectedCiclo
+    const matchesSearch = curso.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (curso.docente?.nombres || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (curso.docente?.apellidos || '').toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesCiclo = selectedCiclo === '' || curso.ciclo?.toString() === selectedCiclo
     
     return matchesSearch && matchesCiclo
   }) || []
+
+  console.log('🎯 Original cursos count:', cursos?.length || 0)
+  console.log('🎯 Filtered cursos count:', filteredCursos.length)
+  console.log('🎯 Search term:', searchTerm)
+  console.log('🎯 Selected ciclo:', selectedCiclo)
 
   const ciclos = Array.from(new Set(cursos?.map(curso => curso.ciclo) || [])).sort()
 
@@ -167,7 +185,7 @@ const CursosPage = () => {
             >
               <option value="">Todos los ciclos</option>
               {ciclos.map((ciclo) => (
-                <option key={ciclo} value={ciclo.toString()}>
+                <option key={ciclo} value={ciclo?.toString()}>
                   Ciclo {ciclo}
                 </option>
               ))}
@@ -248,7 +266,7 @@ const CursosPage = () => {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {curso.nombreCurso}
+                            {curso.nombre}
                           </div>
                         </div>
                       </div>
@@ -334,7 +352,7 @@ const CursosPage = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
         title="Eliminar Curso"
-        message={`¿Estás seguro de que deseas eliminar el curso "${cursoToDelete?.nombreCurso}"? Esta acción no se puede deshacer.`}
+        message={`¿Estás seguro de que deseas eliminar el curso "${cursoToDelete?.nombre}"? Esta acción no se puede deshacer.`}
         confirmText="Eliminar"
         cancelText="Cancelar"
         type="danger"
