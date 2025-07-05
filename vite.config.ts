@@ -12,5 +12,24 @@ export default defineConfig({
         secure: false
       }
     }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['@headlessui/react', '@heroicons/react'],
+          charts: ['recharts'],
+          utils: ['axios', 'date-fns', 'clsx']
+        }
+      }
+    }
+  },
+  preview: {
+    port: 3000,
+    host: true
   }
 })

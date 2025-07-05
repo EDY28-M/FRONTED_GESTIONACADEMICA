@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
-const API_BASE_URL = 'https://localhost:7219/api'
+// Usar la variable de entorno para la URL base
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7219/api'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,14 +11,18 @@ const api = axios.create({
   },
 })
 
-// Request interceptor para logging
+// Request interceptor para logging (solo en desarrollo)
 api.interceptors.request.use(
   (config) => {
-    console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`)
+    if (import.meta.env.VITE_DEV_MODE === 'true') {
+      console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`)
+    }
     return config
   },
   (error) => {
-    console.error('❌ Request error:', error)
+    if (import.meta.env.VITE_DEV_MODE === 'true') {
+      console.error('❌ Request error:', error)
+    }
     return Promise.reject(error)
   }
 )
@@ -25,11 +30,15 @@ api.interceptors.request.use(
 // Response interceptor para manejo de errores
 api.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log(`✅ ${response.status} ${response.config.url}`)
+    if (import.meta.env.VITE_DEV_MODE === 'true') {
+      console.log(`✅ ${response.status} ${response.config.url}`)
+    }
     return response
   },
   (error) => {
-    console.error('❌ Response error:', error.response?.data || error.message)
+    if (import.meta.env.VITE_DEV_MODE === 'true') {
+      console.error('❌ Response error:', error.response?.data || error.message)
+    }
     
     if (error.response?.status === 401) {
       // Handle unauthorized access

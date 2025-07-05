@@ -154,7 +154,7 @@ const EstadisticasPage = () => {
                   fill="#8884d8"
                   dataKey="cantidad"
                 >
-                  {profesionData.map((entry, index) => (
+                  {profesionData.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

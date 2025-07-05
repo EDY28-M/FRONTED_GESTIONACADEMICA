@@ -149,7 +149,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ docentes = [], cursos = [
                   dataKey="cantidad"
                   fontSize={10}
                 >
-                  {profesionData.map((entry, index) => (
+                  {profesionData.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
