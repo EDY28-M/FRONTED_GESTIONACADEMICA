@@ -1,4 +1,8 @@
 # _redirects file for Render.com
 # This handles client-side routing for React apps
 
+# Redirect all routes to index.html for SPA
 /*    /index.html   200
+
+# API routes should not be redirected (if you have any API in the same domain)
+/api/*    /api/:splat   200
