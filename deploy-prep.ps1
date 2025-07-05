@@ -1,5 +1,5 @@
-# Script de preparación para despliegue en DigitalOcean (PowerShell)
-Write-Host "🚀 Preparando proyecto para despliegue en DigitalOcean..." -ForegroundColor Green
+# Script de preparación para despliegue en Render (PowerShell)
+Write-Host "🚀 Preparando proyecto para despliegue en Render..." -ForegroundColor Green
 
 # Verificar que Node.js esté instalado
 try {
@@ -51,17 +51,21 @@ npm run build:prod
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ Build exitoso!" -ForegroundColor Green
     Write-Host ""
-    Write-Host "🎉 Proyecto listo para despliegue!" -ForegroundColor Green
+    Write-Host "🎉 Proyecto listo para despliegue en Render!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Próximos pasos:" -ForegroundColor Cyan
     Write-Host "1. Hacer commit y push del código:" -ForegroundColor White
     Write-Host "   git add ." -ForegroundColor Gray
-    Write-Host "   git commit -m 'Preparar para despliegue en DigitalOcean'" -ForegroundColor Gray
+    Write-Host "   git commit -m 'Configurar para despliegue en Render'" -ForegroundColor Gray
     Write-Host "   git push origin main" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "2. Ir a DigitalOcean App Platform y crear una nueva app" -ForegroundColor White
-    Write-Host "3. Configurar las variables de entorno según DEPLOYMENT.md" -ForegroundColor White
-    Write-Host "4. ¡Desplegar!" -ForegroundColor White
+    Write-Host "2. Ir a https://render.com y crear una nueva Static Site" -ForegroundColor White
+    Write-Host "3. Conectar tu repositorio de GitHub" -ForegroundColor White
+    Write-Host "4. Configurar:" -ForegroundColor White
+    Write-Host "   - Build Command: npm run build:prod" -ForegroundColor Gray
+    Write-Host "   - Publish Directory: dist" -ForegroundColor Gray
+    Write-Host "5. Configurar variables de entorno según RENDER-DEPLOYMENT.md" -ForegroundColor White
+    Write-Host "6. ¡Desplegar!" -ForegroundColor White
 } else {
     Write-Host "❌ Error en el build. Revisa los errores arriba." -ForegroundColor Red
     exit 1

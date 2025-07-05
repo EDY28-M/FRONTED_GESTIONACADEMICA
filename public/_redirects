@@ -1,0 +1,4 @@
+# _redirects file for Render.com
+# This handles client-side routing for React apps
+
+/*    /index.html   200

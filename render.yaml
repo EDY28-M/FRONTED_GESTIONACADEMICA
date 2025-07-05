@@ -1,0 +1,25 @@
+# Render.com deployment configuration
+version: "1"
+
+services:
+  # Frontend Service
+  - type: web
+    name: gestion-academica-frontend
+    env: node
+    plan: starter
+    buildCommand: npm run build:prod
+    startCommand: npm run preview
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 18.18.0
+      - key: VITE_API_URL
+        value: https://your-backend-app.onrender.com/api
+      - key: VITE_APP_NAME
+        value: "Gestión Académica"
+      - key: VITE_APP_VERSION
+        value: "1.0.0"
+      - key: VITE_DEV_MODE
+        value: "false"
+      - key: VITE_ENABLE_DEVTOOLS
+        value: "false"
