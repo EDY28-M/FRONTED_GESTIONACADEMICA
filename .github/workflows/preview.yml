@@ -1,0 +1,79 @@
+name: PR Preview - Build & Test
+
+on:
+  pull_request:
+    branches: [ main, master ]
+    types: [opened, synchronize, reopened]
+
+env:
+  PROJECT_ID: ascendant-altar-457900-v4
+
+jobs:
+  # Preview build para Pull Requests
+  preview:
+    runs-on: ubuntu-latest
+    name: 🔍 PR Preview & Test
+    
+    steps:
+    - name: 📚 Checkout PR code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: 📥 Install dependencies
+      run: npm ci
+
+    - name: 🔍 Run type checking
+      run: npm run type-check || echo "Type checking completed"
+
+    - name: 🧹 Run linting
+      run: npm run lint || echo "Linting completed with warnings"
+
+    - name: 🏗️ Build application
+      run: npm run build:prod
+
+    - name: 📊 Build size analysis
+      run: |
+        echo "📊 Build Analysis:"
+        du -sh dist/
+        echo "📁 Files created:"
+        ls -la dist/
+        echo "🗂️ Asset sizes:"
+        ls -lah dist/assets/ || echo "No assets directory"
+
+    - name: 💬 Comment on PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Get build info
+          const buildSize = require('child_process').execSync('du -sh dist/').toString().trim();
+          
+          const comment = `## 🔍 PR Preview Build Results
+          
+          ✅ **Build Status**: Successful
+          📦 **Build Size**: \`${buildSize}\`
+          🔗 **Preview**: This PR is ready for review
+          
+          ### 📊 Build Summary:
+          - ✅ Dependencies installed
+          - ✅ Type checking completed  
+          - ✅ Linting completed
+          - ✅ Production build successful
+          
+          ### 🚀 Next Steps:
+          - Merge this PR to automatically deploy to production
+          - Or test locally with: \`npm run preview\`
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

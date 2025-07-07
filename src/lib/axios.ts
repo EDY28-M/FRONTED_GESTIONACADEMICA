@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
 // Usar la variable de entorno para la URL base
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://34.60.233.211:8080/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://34.60.233.211/api'
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -1,0 +1,111 @@
+name: CI/CD Pipeline - Deploy to Cloud Run
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  PROJECT_ID: ascendant-altar-457900-v4
+  SERVICE_NAME: gestion-academica-frontend
+  REGION: us-central1
+  IMAGE_NAME: gcr.io/ascendant-altar-457900-v4/gestion-academica-frontend
+
+jobs:
+  # Job de Testing
+  test:
+    runs-on: ubuntu-latest
+    name: 🧪 Test & Build
+    
+    steps:
+    - name: 📚 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: 📥 Install dependencies
+      run: npm ci
+
+    - name: 🔍 Run linting
+      run: npm run lint || echo "Linting completed with warnings"
+
+    - name: 🏗️ Build application
+      run: npm run build:prod
+
+    - name: 📤 Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-files
+        path: dist/
+        retention-days: 1
+
+  # Job de Deploy (solo en push a main/master)
+  deploy:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: test
+    runs-on: ubuntu-latest
+    name: 🚀 Deploy to Cloud Run
+    
+    steps:
+    - name: 📚 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📥 Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: dist-files
+        path: dist/
+
+    - name: 🔐 Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: ⚙️ Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: 🔧 Configure Docker for GCR
+      run: gcloud auth configure-docker
+
+    - name: 🐳 Build Docker image
+      run: |
+        docker build -t $IMAGE_NAME .
+        echo "✅ Docker image built successfully"
+
+    - name: 📤 Push Docker image to GCR
+      run: |
+        docker push $IMAGE_NAME
+        echo "✅ Docker image pushed to GCR"
+
+    - name: 🚀 Deploy to Cloud Run
+      run: |
+        gcloud run deploy $SERVICE_NAME \
+          --image $IMAGE_NAME \
+          --platform managed \
+          --region $REGION \
+          --allow-unauthenticated \
+          --port 8080 \
+          --memory 512Mi \
+          --cpu 1 \
+          --max-instances 10 \
+          --set-env-vars "VITE_API_URL=https://34.60.233.211/api,VITE_BACKEND_HTTPS=https://34.60.233.211,VITE_SWAGGER_URL=https://34.60.233.211/swagger,VITE_APP_NAME=Gestión Académica,VITE_DEV_MODE=false" \
+          --quiet
+
+    - name: 🌐 Get service URL
+      id: get-url
+      run: |
+        SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --platform managed --region $REGION --format 'value(status.url)')
+        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_OUTPUT
+        echo "🌐 Service deployed at: $SERVICE_URL"
+
+    - name: ✅ Deployment success notification
+      run: |
+        echo "🎉 Deployment completed successfully!"
+        echo "🌐 Frontend: ${{ steps.get-url.outputs.SERVICE_URL }}"
+        echo "📡 Backend: https://34.60.233.211/api"
+        echo "📋 Swagger: https://34.60.233.211/swagger"

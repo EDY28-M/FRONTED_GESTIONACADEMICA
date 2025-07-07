@@ -8,9 +8,9 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'http://34.60.233.211:8080',
+        target: 'https://34.60.233.211',
         changeOrigin: true,
-        secure: false
+        secure: false // Permite certificados autofirmados en desarrollo
       }
     }
   },

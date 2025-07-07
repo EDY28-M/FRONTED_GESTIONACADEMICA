@@ -1,6 +1,6 @@
 // Configuración de la API
 const API_CONFIG = {
-    BASE_URL: 'http://34.60.233.211:8080/api', // URL de API en Google Cloud
+    BASE_URL: 'https://34.60.233.211/api', // URL de API HTTPS en Google Cloud
     ENDPOINTS: {
         DOCENTES: '/Docentes',
         CURSOS: '/Cursos',
