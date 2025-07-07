@@ -2,6 +2,11 @@
 
 Un panel administrativo moderno y minimalista para la gestión de docentes y cursos académicos, desarrollado con React, TypeScript y Tailwind CSS.
 
+## 🌐 Despliegue en Producción
+- **Frontend:** [https://gestion-academica-frontend-qqdyb6apia-uc.a.run.app](https://gestion-academica-frontend-qqdyb6apia-uc.a.run.app)
+- **Backend API:** https://34.60.233.211/api
+- **CI/CD:** GitHub Actions + Google Cloud Run
+
 ## 🚀 Características
 
 ### 📊 Dashboard Interactivo
