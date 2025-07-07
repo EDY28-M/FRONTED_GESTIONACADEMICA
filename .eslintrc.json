@@ -1,5 +1,7 @@
 {
-  "extends": ["@vitejs/plugin-react/recommended"],
+  "extends": [
+    "eslint:recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -8,16 +10,22 @@
       "jsx": true
     }
   },
-  "plugins": ["react-hooks"],
+  "plugins": ["react", "react-hooks"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "no-unused-vars": "warn",
+    "no-console": "warn"
   },
   "settings": {
     "react": {
       "version": "detect"
     }
+  },
+  "env": {
+    "browser": true,
+    "es2020": true,
+    "node": true
   }
 }

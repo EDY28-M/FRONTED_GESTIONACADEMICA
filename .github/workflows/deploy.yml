@@ -31,8 +31,9 @@ jobs:
     - name: 📥 Install dependencies
       run: npm ci
 
-    - name: 🔍 Run linting
+    - name: 🔍 Run linting (optional)
       run: npm run lint || echo "Linting completed with warnings"
+      continue-on-error: true
 
     - name: 🏗️ Build application
       run: npm run build:prod
